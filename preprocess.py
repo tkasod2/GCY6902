@@ -1,21 +1,18 @@
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.model_selection import train_test_split
 
 def prepare_data(df_in:pd.DataFrame,
                  target='Close',
-                 trk_start_year=2011,
-                 seq_length=5,
-                 year_cut1=2019,
-                 year_cut2=2020):
+                 seq_length=30,
+                 test_date ='2025-03-01'):
 
     """
-    df_in : 산업재무 데이터
-    target : 추정하고자하는 산업재무 항목
-    trk_start_year : 보유정보 최초의 관찰 시작 연도
-    seq_length : n개년도 데이터로 추정할것인지에 대한 params
-    year_cut1 : train 데이터의 max year
-    year_cut2 : valid 데이터의 max year
+    df_in : e데이터
+    target : 예측 가격(일종가, 4시간봉 등등)
+    seq_length : 하나의 SEQ를 몇줄로 할것인지
+    tvt_date : train&valid // test를 나누는 경계 시점
     """
 
     # 1. Data 세팅
@@ -29,7 +26,7 @@ def prepare_data(df_in:pd.DataFrame,
 
     scaler = StandardScaler()
 
-    scaler.fit(df.loc[df[time_col] < '2025-12-01', past_vars])  # train data로 standard scaler fitting
+    scaler.fit(df.loc[df[time_col] < '2024-12-01', past_vars])  # train data로 standard scaler fitting
     df[past_vars] = scaler.transform(df[past_vars])  # 전체 데이터에 대해서 scaling 진행
     df[past_vars] = df[past_vars].fillna(0)  # 결측치 보간은 우선 0으로 처리
 
@@ -71,9 +68,9 @@ def prepare_data(df_in:pd.DataFrame,
                 np.array(x_static_list, np.float32).reshape(-1, 1), 
                 np.array(y_list, np.float32).reshape(-1, 1))
     
-    train_df = df[df[time_col] < '2025-06-01']
-    valid_df = df[(df[time_col] >= '2025-06-01') & (df[time_col] < '2025-12-01')]
-    test_df = df[df[time_col] >= '2025-12-01']
+    tv_df = df[df[time_col] < test_date].copy()
+    train_df, valid_df = train_test_split(tv_df,test_size=0.2,random_state=42)
+    test_df = df[df[time_col] >= test_date].copy()
 
     x_past_1, x_known_1, x_static_1, y_1 = make_sequence(train_df)
     x_past_2, x_known_2, x_static_2, y_2 = make_sequence(valid_df)
