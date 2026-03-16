@@ -11,12 +11,12 @@
 - 과거 binance 정보로 next timestamp 또는 long-term의 timestamp를 추정하는 구조
 - TFT(Temporal Fusion Transformer) 아키텍처를 사용하여 변수 선택과 시계열 특징 추출을 동시에 수행
 
-3 데이터 전처리 단계 (preprocess.py)
+3. 데이터 전처리 단계 (preprocess.py)
 - 변수 구분: past_vars(과거 거래정보), known_vars(시간 인덱스), static_vars(symbol)로 분류
 - 스케일링: StandardScaler를 사용하여 데이터를 표준화
 - 시퀀스 생성: Sliding Window 기법을 사용하여 seq_length(기본 30일)만큼의 과거 데이터를 묶어 학습 샘플을 생성
 
-4 TFT 모델 구조 (tft_model.py)
+4. TFT 모델 구조 (tft_model.py)
 모델은 크게 4가지 핵심 블록으로 구성됩니다.
 - VSN (Variable Selection Network): 어떤 변수가 예측에 중요한지 가중치를 학습하여 선택적으로 정보를 반영합니다.
 - GRN (Gated Residual Network): 데이터의 비선형 특징을 효율적으로 추출하면서, 불필요한 층은 건너뛰는(Gating) 역할을 합니다.
