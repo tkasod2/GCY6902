@@ -1,11 +1,11 @@
 # GCY6902
 
 1. File tree
-├── preprocess.py        # 시계열 데이터 전처리 (Scaling, Sliding Window 시퀀스 생성)
-├── tft_model.py           # TFT 모델 아키텍처 정의 (GRN, VSN, Attention 등)
-├── train_tft.py           # PyTorch Dataset 정의 및 학습/평가 루프 (Trainer)
-├── run.py                 # 전체 프로세스 통합 실행 함수 (fit_and_out)
-└── run_execute.ipynb       # 최종 실행용 Jupyter Notebook
+├── preprocess.py        # 시계열 데이터 전처리 (Scaling, Sliding Window 시퀀스 생성)  
+├── tft_model.py           # TFT 모델 아키텍처 정의 (GRN, VSN, Attention 등)  
+├── train_tft.py           # PyTorch Dataset 정의 및 학습/평가 루프 (Trainer)  
+├── run.py                 # 전체 프로세스 통합 실행 함수 (fit_and_out)  
+└── run_execute.ipynb       # 최종 실행용 Jupyter Notebook  
 
 2. Flow
 - 과거 binance 정보로 next timestamp 또는 long-term의 timestamp를 추정하는 구조
