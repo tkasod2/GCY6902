@@ -289,11 +289,12 @@ class TemporalFusionTransformer(nn.Module):
         elif self.cfg.output_mode == "regression":
             # 필요시 output_dim==59일 때 일부만 sigmoid 적용하는 기존 룰을 사용할 수 있음
             # if self.cfg.output_dim == 59:
-            a = out[:, 0:1]
-            b = torch.sigmoid(out[:, 1:3])
-            c = out[:, 3:17]
-            d = torch.sigmoid(out[:, 17:])
-            out = torch.cat([a, b, c, d], dim=1)
+            # a = out[:, 0:1]
+            # b = torch.sigmoid(out[:, 1:3])
+            # c = out[:, 3:17]
+            # d = torch.sigmoid(out[:, 17:])
+            # out = torch.cat([a, b, c, d], dim=1)
+            out = out
         elif self.cfg.output_mode == "multiclass":
             # 학습 시 CrossEntropyLoss를 쓰면 여기서 softmax는 보통 생략
             pass
