@@ -18,29 +18,6 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error
 
 #sample test
 from preprocess import *
-def get_inverse_transform(y_hat, scaler, past_vars, target_col='Close'):
-    """
-    y_hat: 모델의 예측값 (N, 1) 또는 (N,)
-    scaler: preprocess.py에서 반환받은 fitted StandardScaler
-    past_vars: 스케일러가 학습한 변수 리스트
-    target_col: 복원하고자 하는 타겟 변수명
-    """
-    # 1. 예측값을 2차원 배열로 변경 (N, 1)
-    y_hat_reshaped = np.array(y_hat).reshape(-1, 1)
-    
-    # 2. 스케일러의 입력 차원과 동일한 더미 행렬 생성 (N, 9)
-    # 모든 값을 0으로 채운 뒤, 타겟 변수가 있던 위치에만 예측값을 삽입
-    dummy = np.zeros((len(y_hat_reshaped), len(past_vars)))
-    
-    # 타겟 변수(Close)의 인덱스 찾기
-    target_idx = past_vars.index(target_col)
-    dummy[:, target_idx] = y_hat_reshaped.flatten()
-    
-    # 3. 역변환 수행
-    inverse_dummy = scaler.inverse_transform(dummy)
-    
-    # 4. 역변환된 행렬에서 타겟 컬럼만 추출
-    return inverse_dummy[:, target_idx]
 
 def fit_and_out(df,
                 target='Close',
@@ -123,18 +100,12 @@ def fit_and_out(df,
             all_tft_preds.append(y_tft.numpy())
             all_lstm_preds.append(y_lstm.numpy())
             all_weights.append(aux['w_past'].numpy())
-    all_actuals = np.concatenate(all_actuals, axis=0)
-    all_tft_preds = np.concatenate(all_tft_preds, axis=0)
-    all_lstm_preds = np.concatenate(all_lstm_preds, axis=0)
-    # 결과 data frame
-    tft_rescaled = get_inverse_transform(all_tft_preds, scaler, past_vars, target)
-    lstm_rescaled = get_inverse_transform(all_lstm_preds, scaler, past_vars, target)
-    actual_rescaled = get_inverse_transform(all_actuals, scaler, past_vars, target)
 
+    # 결과 data frame
     res_df = pd.DataFrame({
-        'Actual': actual_rescaled,
-        'TFT_Prediction': tft_rescaled,
-        'LSTM_Prediction': lstm_rescaled
+        'Actual': np.concatenate(all_actuals).flatten(),
+        'TFT_Prediction': np.concatenate(all_tft_preds).flatten(),
+        'LSTM_Prediction': np.concatenate(all_lstm_preds).flatten()
     })
     res_df.to_csv(outdir + f"{target}_comparison_results.csv", index=False)
     
@@ -245,18 +216,12 @@ def load_and_output(df,
             all_lstm_preds.append(y_lstm.numpy())
             all_weights.append(aux['w_past'].numpy())
 
-    
     # 결과 data frame
-    tft_rescaled = get_inverse_transform(all_tft_preds, scaler, past_vars, target)
-    lstm_rescaled = get_inverse_transform(all_lstm_preds, scaler, past_vars, target)
-    actual_rescaled = get_inverse_transform(all_actuals, scaler, past_vars, target)
-
     res_df = pd.DataFrame({
-        'Actual': actual_rescaled,
-        'TFT_Prediction': tft_rescaled,
-        'LSTM_Prediction': lstm_rescaled
+        'Actual': np.concatenate(all_actuals).flatten(),
+        'TFT_Prediction': np.concatenate(all_tft_preds).flatten(),
+        'LSTM_Prediction': np.concatenate(all_lstm_preds).flatten()
     })
-    # 결과 data frame
     res_df.to_csv(outdir + f"{target}_comparison_results.csv", index=False)
     
     actual = res_df['Actual']

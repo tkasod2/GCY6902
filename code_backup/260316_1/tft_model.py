@@ -294,7 +294,7 @@ class TemporalFusionTransformer(nn.Module):
             # c = out[:, 3:17]
             # d = torch.sigmoid(out[:, 17:])
             # out = torch.cat([a, b, c, d], dim=1)
-            pass
+            out = out
         elif self.cfg.output_mode == "multiclass":
             # 학습 시 CrossEntropyLoss를 쓰면 여기서 softmax는 보통 생략
             pass

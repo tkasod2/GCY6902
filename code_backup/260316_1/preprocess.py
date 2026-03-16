@@ -26,7 +26,7 @@ def prepare_data(df_in:pd.DataFrame,
 
     scaler = StandardScaler()
 
-    scaler.fit(df.loc[df[time_col] < test_date, past_vars])  # train data로 standard scaler fitting
+    scaler.fit(df.loc[df[time_col] < '2024-12-01', past_vars])  # train data로 standard scaler fitting
     df[past_vars] = scaler.transform(df[past_vars])  # 전체 데이터에 대해서 scaling 진행
     df[past_vars] = df[past_vars].fillna(0)  # 결측치 보간은 우선 0으로 처리
 
