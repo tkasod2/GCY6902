@@ -1,6 +1,6 @@
 # GCY6902
 
-1. File tree
+1. File tree  
 ├── preprocess.py        # 시계열 데이터 전처리 (Scaling, Sliding Window 시퀀스 생성)  
 ├── tft_model.py           # TFT 모델 아키텍처 정의 (GRN, VSN, Attention 등)  
 ├── train_tft.py           # PyTorch Dataset 정의 및 학습/평가 루프 (Trainer)  
