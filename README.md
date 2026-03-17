@@ -17,9 +17,9 @@
 - 시퀀스 생성: Sliding Window 기법을 사용하여 seq_length(기본 30일)만큼의 과거 데이터를 묶어 학습 샘플을 생성
 
 4. TFT 모델 구조 (tft_model.py)
-모델은 크게 4가지 핵심 블록으로 구성됩니다.
-- VSN (Variable Selection Network): 어떤 변수가 예측에 중요한지 가중치를 학습하여 선택적으로 정보를 반영합니다.
-- GRN (Gated Residual Network): 데이터의 비선형 특징을 효율적으로 추출하면서, 불필요한 층은 건너뛰는(Gating) 역할을 합니다.
-- LSTM Encoder: 시계열의 순차적인 흐름을 파악합니다.
-- Multi-head Attention: 과거 특정 시점의 데이터가 현재 예측에 얼마나 중요한지(장기 의존성) 파악합니다.
+모델은 크게 4가지 핵심 블록으로 구성
+- VSN (Variable Selection Network): 어떤 변수가 예측에 중요한지 가중치를 학습하여 선택적으로 정보를 반영
+- GRN (Gated Residual Network): 데이터의 비선형 특징을 효율적으로 추출하면서, 불필요한 층은 건너뛰는(Gating) 역할
+- LSTM Encoder: 시계열의 순차적인 흐름 파악
+- Multi-head Attention: 과거 특정 시점의 데이터가 현재 예측에 얼마나 중요한지(장기 의존성) 파악
 
