@@ -1,11 +1,9 @@
-
 # -*- coding: utf-8 -*-
 """
 Temporal Fusion Transformer (TFT) - Minimal PyTorch implementation (CPU-friendly)
 - 목적: 산업재무 개별 항목(연속값) 또는 구간(분류/다중라벨)을 예측
 - 기존 TF(T-LSTM) 코드의 입력 인터페이스(x, t, pos)를 최대한 유지하면서
   TFT 구조(변수선택+LSTM+Attention+Gating)를 적용할 수 있도록 설계
-
 주의:
 - 최소구현
 - TODO부분 채울것
@@ -69,7 +67,6 @@ class VariableSelectionNetwork(nn.Module):
     Variable Selection Network (VSN)
     - 여러 변수(각각 embedding/projection된 벡터)를 가중합으로 결합
     - weights는 softmax로 산출
-
     입력:
       - var_inputs: (B, T, n_vars, d_model)  또는 (B, n_vars, d_model)도 가능
       - context(optional): (B, T, ctx_dim) 또는 (B, ctx_dim)
@@ -156,7 +153,6 @@ class TemporalFusionTransformer(nn.Module):
       - x_static:(B, static_vars) or None   정적 변수
       - pos:     (B,) or None               기존 코드처럼 '특정 시점 hidden만 뽑기' 옵션
                  (pos=None이면 마지막 시점 output 사용)
-
     출력:
       - y_hat: (B, output_dim)  (pos로 1개 시점 선택 기준)
       - aux: dict (variable selection weights, attention weights 등)
@@ -288,13 +284,7 @@ class TemporalFusionTransformer(nn.Module):
             out = torch.sigmoid(out)
         elif self.cfg.output_mode == "regression":
             # 필요시 output_dim==59일 때 일부만 sigmoid 적용하는 기존 룰을 사용할 수 있음
-            # if self.cfg.output_dim == 59:
-            # a = out[:, 0:1]
-            # b = torch.sigmoid(out[:, 1:3])
-            # c = out[:, 3:17]
-            # d = torch.sigmoid(out[:, 17:])
-            # out = torch.cat([a, b, c, d], dim=1)
-            pass
+            out = out
         elif self.cfg.output_mode == "multiclass":
             # 학습 시 CrossEntropyLoss를 쓰면 여기서 softmax는 보통 생략
             pass
@@ -305,6 +295,7 @@ class TemporalFusionTransformer(nn.Module):
             "w_past": w_past,                  # (B,L,Vp)
             "w_known": w_known if w_known is not None else torch.empty(0),
             "attn_w": attn_w,                  # (B,L,L)
+            "static_weights": s_emb.mean(dim=1)
         }
         if static_ctx is not None:
             aux["static_ctx"] = static_ctx

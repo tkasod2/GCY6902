@@ -1,0 +1,59 @@
+asttokens==3.0.1
+colorama==0.4.6
+comm==0.2.3
+contourpy==1.3.2
+cramjam==2.11.0
+cycler==0.12.1
+debugpy==1.8.20
+decorator==5.2.1
+et_xmlfile==2.0.0
+exceptiongroup==1.3.1
+executing==2.2.1
+fastparquet==2026.3.0
+filelock==3.20.0
+fonttools==4.61.1
+fsspec==2025.12.0
+ipykernel==7.2.0
+ipython==8.38.0
+jedi==0.19.2
+Jinja2==3.1.6
+joblib==1.5.3
+jupyter_client==8.8.0
+jupyter_core==5.9.1
+kiwisolver==1.4.9
+MarkupSafe==3.0.2
+matplotlib==3.10.8
+matplotlib-inline==0.2.1
+mpmath==1.3.0
+nest-asyncio==1.6.0
+networkx==3.4.2
+numpy @ file:///C:/Users/rbs/Dropbox/003.%20Work_NICE/001_%EC%9A%B0%EB%A6%AC%EC%9D%80%ED%96%89AX/%EC%82%B0%EC%97%85%EC%9E%AC%EB%AC%B4/wheels/numpy-1.26.4-cp310-cp310-win_amd64.whl#sha256=b97fe8060236edf3662adfc2c633f56a08ae30560c56310562cb4f95500022d5
+openpyxl==3.1.5
+packaging @ file:///C:/miniconda3/conda-bld/packaging_1761049101700/work
+pandas @ file:///C:/Users/rbs/Dropbox/003.%20Work_NICE/001_%EC%9A%B0%EB%A6%AC%EC%9D%80%ED%96%89AX/%EC%82%B0%EC%97%85%EC%9E%AC%EB%AC%B4/wheels/pandas-2.2.3-cp310-cp310-win_amd64.whl#sha256=56534ce0746a58afaf7942ba4863e0ef81c9c50d3f0ae93e9497d6a41a057645
+parso==0.8.6
+pillow==12.1.1
+platformdirs==4.9.2
+prompt_toolkit==3.0.52
+psutil==7.2.2
+pure_eval==0.2.3
+pyarrow==23.0.1
+Pygments==2.19.2
+pyparsing==3.3.2
+python-dateutil==2.9.0.post0
+pytz==2026.1.post1
+pyzmq==27.1.0
+scikit-learn @ file:///C:/Users/rbs/Dropbox/003.%20Work_NICE/001_%EC%9A%B0%EB%A6%AC%EC%9D%80%ED%96%89AX/%EC%82%B0%EC%97%85%EC%9E%AC%EB%AC%B4/wheels/scikit_learn-1.5.2-cp310-cp310-win_amd64.whl#sha256=c15b1ca23d7c5f33cc2cb0a0d6aaacf893792271cddff0edbd6a40e8319bc113
+scipy==1.15.3
+seaborn==0.13.2
+six==1.17.0
+stack-data==0.6.3
+sympy==1.14.0
+threadpoolctl==3.6.0
+torch @ file:///C:/Users/rbs/Dropbox/003.%20Work_NICE/001_%EC%9A%B0%EB%A6%AC%EC%9D%80%ED%96%89AX/%EC%82%B0%EC%97%85%EC%9E%AC%EB%AC%B4/wheels/torch-2.2.2%2Bcpu-cp310-cp310-win_amd64.whl#sha256=fc29dda2795dd7220d769c5926b1c50ddac9b4827897e30a10467063691cdf54
+tornado==6.5.4
+traitlets==5.14.3
+typing_extensions==4.15.0
+tzdata==2025.3
+wcwidth==0.6.0
+xlsxwriter==3.2.9

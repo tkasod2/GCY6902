@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 """
 TFT 학습 골조 (CPU)
@@ -11,6 +10,7 @@ import os
 import math
 import gzip
 import pickle
+import pandas as pd
 from dataclasses import asdict
 
 import torch
@@ -23,7 +23,7 @@ from tft_model import TFTConfig, TemporalFusionTransformer, SimpleLSTM
 # -----------------------------
 # Dataset
 # -----------------------------
-class FinanceSeqDataset(Dataset):
+class SeqDataset(Dataset):
     """
     기대 형태:
       x_past:  (N, L, past_vars)
@@ -135,11 +135,11 @@ def train(
 
     loss_fn = get_loss_fn(cfg)
     optim = torch.optim.Adam(model.parameters(), lr=lr)
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optim, mode="min", factor=0.2, patience=5)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optim, mode="min", factor=0.2, patience=5, verbose=True)
 
     best = float("inf")
     bad = 0
-
+    df_epoch = pd.DataFrame()
     for epoch in range(1, epochs + 1):
         model.train()
         for x_past, x_known, x_static, pos, y in train_loader:
@@ -149,7 +149,7 @@ def train(
             if pos is not None: pos = pos.to(device)
             y = y.to(device)
 
-            y_hat, _ = model(x_past, x_known=x_known, x_static=x_static, pos=pos)
+            y_hat, _ = model(x_past, x_known=x_known, x_static=x_static, pos=pos) #여기 attention score받을까
 
             if cfg.output_mode == "multiclass":
                 if y.dim() > 1:
@@ -164,12 +164,13 @@ def train(
             loss.backward()
             optim.step()
 
+        tr = evaluate(model, train_loader, loss_fn, device)
         val = evaluate(model, valid_loader, loss_fn, device)
         scheduler.step(val)
 
         ts = evaluate(model, test_loader, loss_fn, device)
-        
-        print(f"[epoch {epoch:03d}] val_loss={val:.6f} | ts_loss ={ts:.6f} lr={optim.param_groups[0]['lr']:.2e}")
+
+        print(f"[TFT Epoch {epoch:03d}] train_loss={tr:.6f} | val_loss={val:.6f} | test_loss={ts:.6f} | lr={optim.param_groups[0]['lr']:.2e}")
 
         if val < best - 1e-8:
             best = val
@@ -181,8 +182,14 @@ def train(
             if bad >= patience:
                 print("  -> early stopping")
                 break
-
-    return model
+        df_tmp = pd.DataFrame({'epoch':[epoch],
+                               'train_loss':[tr],
+                               'val_loss':[val],
+                               'test_loss':[ts],
+                               'lr': [optim.param_groups[0]['lr']]
+                               })
+        df_epoch = pd.concat([df_epoch,df_tmp])
+    return model, df_epoch
 
 def train_lstm(
     input_dim: int,
@@ -193,7 +200,7 @@ def train_lstm(
     epochs: int = 50,
     lr: float = 1e-3,
     patience: int = 10,
-    save_path: str = "lstm_best.pt",
+    save_path: str = "lstm_best.pt"
 ):
     device = torch.device("cpu")
     # SimpleLSTM 모델 초기화
@@ -205,7 +212,7 @@ def train_lstm(
 
     best = float("inf")
     bad = 0
-
+    df_epoch = pd.DataFrame()
     for epoch in range(1, epochs + 1):
         model.train()
         for x_past, x_known, x_static, pos, y in train_loader:
@@ -219,11 +226,11 @@ def train_lstm(
             optim.step()
 
         # 검증 및 테스트 평가
+        tr = evaluate(model, train_loader, loss_fn, device)
         val = evaluate(model, valid_loader, loss_fn, device)
         ts = evaluate(model, test_loader, loss_fn, device)
         scheduler.step(val)
-
-        print(f"[LSTM Epoch {epoch:03d}] val_loss={val:.6f} test_loss={ts:.6f}")
+        print(f"[LSTM Epoch {epoch:03d}] train_loss={tr:.6f} | val_loss={val:.6f} | test_loss={ts:.6f} | lr={optim.param_groups[0]['lr']:.2e}")
 
         if val < best - 1e-8:
             best = val
@@ -235,16 +242,19 @@ def train_lstm(
             if bad >= patience:
                 print("  -> early stopping")
                 break
+        df_tmp = pd.DataFrame({'epoch':[epoch],
+                               'train_loss':[tr],
+                               'val_loss':[val],
+                               'test_loss':[ts],
+                               'lr': [optim.param_groups[0]['lr']]
+                               })
+        df_epoch = pd.concat([df_epoch,df_tmp], ignore_index=False)
 
-    return model
+    return model, df_epoch
 
 
 def main():
-    # TODO: 여기에 실제 데이터 로드 로직 필요
-    # 예시(기존 스타일):
-    # with gzip.open("train.pkl.gz", "rb") as f:
-    #     x_past_train, x_known_train, x_static_train, pos_train, y_train = pickle.load(f)
-
+    print('참조\n (1) run_regression.py \n (2) prepare_data.py')
     raise SystemExit(
         "데이터 로드/피처 분해(past/known/static) 작성후 돌아감"
     )
