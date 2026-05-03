@@ -189,6 +189,8 @@ def train(
                                'lr': [optim.param_groups[0]['lr']]
                                })
         df_epoch = pd.concat([df_epoch,df_tmp])
+    checkpoint = torch.load(save_path, map_location=device)
+    model.load_state_dict(checkpoint['state_dict'])
     return model, df_epoch
 
 def train_lstm(
