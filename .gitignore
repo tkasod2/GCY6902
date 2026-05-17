@@ -208,6 +208,17 @@ __marimo__/
 
 
 # RBS private
+/00.휴지통
+/000.data_extract
+/code_backup
 /data
 /output
+/outputs
 *.xlsx
+*.parquet
+*.csv
+*.pt
+*.pkl
+*.csv.gz
+*.pdf
+*.png
