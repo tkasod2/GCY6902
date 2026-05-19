@@ -1,0 +1,11 @@
+{
+    "d_model": 128,
+    "hidden_dim": 64,
+    "lstm_hidden": 64,
+    "n_heads": 32,
+    "dropout": 0.2,
+    "past_vars": 110,
+    "known_vars": 1,
+    "static_vars": 1,
+    "output_mode": "regression"
+}

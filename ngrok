@@ -1,0 +1,8 @@
+# 토큰 입력용
+ngrok config add-authtoken 3Ct1Dabq8ThmpQimFBXyHyHXvaD_RJ2dwRvnMSTLRU4KM63E
+
+# 배포환경 실행
+python -m streamlit run app_260517_3.py
+
+# 터미널 연동
+ngrok http 8501

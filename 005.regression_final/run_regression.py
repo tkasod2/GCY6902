@@ -11,6 +11,7 @@ from openpyxl import Workbook
 from openpyxl.drawing.image import Image as OpenpyxlImage
 from openpyxl import load_workbook
 import pickle
+import json
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -92,6 +93,8 @@ def fit_and_out(df,
     )
 
     # labelencoder, StandardScaler 저장
+    with open(os.path.join(outdir+"config.json"), "w", encoding='utf-8') as f:
+        json.dump(config_dict, f, indent=4)
     with open(outdir+'label_encoder.pkl','wb') as f:
         pickle.dump(le, f, pickle.HIGHEST_PROTOCOL)
     with open(outdir+'scaler.pkl','wb') as f:
